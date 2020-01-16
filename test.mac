@@ -1,0 +1,87 @@
+|***
+ *
+ * MacroQuest2
+ * TLO.Member testing
+ *
+ *
+ *
+ *
+ ***|
+
+
+#warning
+#turbo 200
+
+#define OUT "/echo -"
+#define LOG "/mqlog"
+#define GOOD "\agpass\ax"
+#define BAD "\arfail\ax"
+#define INC "\ayincomplete\ax"
+
+#include MQTest\MQ2MacroType.inc
+#include MQTest\MQ2CharacterType.inc
+
+
+
+
+sub main(Param0)
+
+	/mqclear
+
+	/echo
+
+	| set some outer variables
+	| these will be used all over the place.
+	| outer string (yes i know it's a long word)
+	/declare outerString string outer OuterStringOUTERSTRING
+	| outer int
+	/declare outerInt int outer 999999
+	| outer bool
+	/declare outerBool bool outer TRUE
+
+	| fake a Param if one is not pased
+	/if (!${Bool[${Param0}]}) {
+		/varset Param0 bob
+	}
+
+
+	/call start_MQ2MacroType
+	/call start_MQ2CharacterType
+
+
+	/echo
+/return
+
+
+
+
+
+|**
+ * outputs results to screen and log
+ * /invoke ${out[pass/fail/inc, MEMBER, expected type of data, ${TLO.Member}]}
+ **|
+sub out(string _gb, string _name, string _expect, string _got)
+
+	/if (${_gb.Equal[good]}) {
+		LOG ..${_name} .. pass
+		OUT ..${_name} .. GOOD
+	} else /if (${_gb.Equal[bad]}) {
+		LOG ..${_name} .. FAIL.. expect:${_expect} got:${_got}
+		OUT ..\aw${_name}\ax .. BAD
+		OUT ....expect: \at${_expect}\ax ....got: \at${_got}\ax
+	} else /if (${_gb.Equal[inc]}) {
+		LOG ..${_name} .. INCOMPLETE.. unable to test on this run
+		OUT ..\aw${_name}\ax .. INC
+		OUT ....expect: \at${_expect}\ax ....got: \at${_got}\ax
+	}
+
+/return
+
+
+
+|**
+ * simply returns the default outer string
+ **|
+sub test_return_string()
+ | empty
+/return ${outerString}
