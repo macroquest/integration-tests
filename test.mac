@@ -18,8 +18,8 @@
 #define BAD "\arfail\ax"
 #define INC "\ayincomplete\ax"
 
-#include MQTest\MQ2MacroType.inc
-#include MQTest\MQ2CharacterType.inc
+#include TestSuite\MQ2MacroType.inc
+#include TestSuite\MQ2CharacterType.inc
 
 
 

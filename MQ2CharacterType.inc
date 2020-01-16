@@ -253,17 +253,18 @@ sub start_MQ2CharacterType()
 
 
 	| Me.AAExp
-		/if (!${Range.Between[0,100:${Me.AAExp}]) {
+		/if (!${Range.Between[0,99999:${Me.AAExp}]}) {
 			/invoke ${out[bad, AAExp, int, ${Me.AAExp}]}
 		} else {
 			/invoke ${out[good, AAExp]}
 		}
 
-
-
-
 	| Me.AAPoints
-
+		/if (!${Range.Between[0,99999:${Me.AAPoints}]}) {
+			/invoke ${out[bad, AAPoints, int, ${Me.AAPoints}]}
+		} else {
+			/invoke ${out[good, AAPoints]}
+		}
 	| Me.Combat
 
 	| Me.HPRegen
