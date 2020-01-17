@@ -28,8 +28,6 @@ sub start_MQ2CharacterType()
 			}
 		/next _count
 
-
-
 	| BaseSTR, BaseSTA, BaseAGI, BaseDEX, BaseWIS, BaseINT, BaseCHA
 		/varset _MemberList |BaseSTR|BaseSTA|BaseAGI|BaseDEX|BaseWIS|BaseINT|BaseCHA
 		/for _count 1 to ${_MemberList.Count[|]}
@@ -41,9 +39,6 @@ sub start_MQ2CharacterType()
 				/invoke ${out[good, ${_stat}]}
 			}
 		/next _count
-
-
-
 
 	| svMagic, svFire, svCold, svPoison, svDisease, svCorruption, svPrismatic, svChromatic
 		/varset _MemberList |svMagic|svFire|svCold|svPoison|svDisease|svCorruption|svPrismatic|svChromatic
@@ -57,9 +52,6 @@ sub start_MQ2CharacterType()
 			}
 		/next _count
 
-
-
-
 	| HeroicINTBonus, HeroicWISBonus, HeroicAGIBonus, HeroicDEXBonus, HeroicSTABonus, HeroicCHABonus
 		/varset _MemberList |HeroicINTBonus|HeroicWISBonus|HeroicAGIBonus|HeroicDEXBonus|HeroicSTABonus|HeroicCHABonus
 		/for _count 1 to ${_MemberList.Count[|]}
@@ -72,9 +64,6 @@ sub start_MQ2CharacterType()
 			}
 		/next _count
 
-
-
-
 	| Me.CurrentWeight
 		/if (!${Range.Between[1,99999:${Me.CurrentWeight}]}) {
 			/invoke ${out[bad, CurrentWeight, int, ${Me.CurrentWeight}]}
@@ -84,16 +73,36 @@ sub start_MQ2CharacterType()
 
 	| Me.Name
 
-
-
-
-
 	| Me.Origin
+		/varset _tmpSwitch FALSE
+		/declare _origin[3] string local
+		/varset _origin[1] |Northern Felwithe|Southern Felwithe|Crescent Reach|Halas|South Kaladim|Erudin Palace|Ak'Anon|Surefall Glade|The Grater Faydark|Riverdale
+		/varset _origin[2] |West Freeport|East Freeport|Cabilis East|Cabilis West|Oggok|Grobb|Shar Vahl|The Rathe Mountains|South Qeynos|North Qeynos|
+		/varset _origin[3] |Neriak - Commons|Neriak - Third Gate
+
+		/for _countArray 1 to ${_origin.Size}
+			/for _count 1 to ${_origin[${_countArray}].Count[|]}
+				/if (${Zone[${Me.Origin}].ID} == ${Zone[${_origin[${_countArray}].Arg[${_count},|]}].ID}) {
+					/varset _tmpSwitch TRUE
+					/break
+				}
+
+			/next _count
+		/if (${_tmpSwitch}) /break
+		/next _countArray
+
+		/if (!${_tmpSwitch}) {
+			/invoke ${out[bad, Origin, string, ${Me.Origin}]}
+		} else {
+			/invoke ${out[good, Origin]}
+		}
 
 	| Me.SubscriptionDays
-
-
-
+		/if (!${Range.Between[-1,365:${Me.SubscriptionDays}]}) {
+			/invoke ${out[bad, SubscriptionDays, int, ${Me.SubscriptionDays}]}
+		} else {
+			/invoke ${out[good, SubscriptionDays]}
+		}
 
 	| Me.Subscription
 		/if (!${Select[${Me.Subscription},FREE,SILVER,GOLD]}) {
@@ -101,8 +110,6 @@ sub start_MQ2CharacterType()
 		} else {
 			/invoke ${out[good, Subscription]}
 		}
-
-
 
 	| Me.Exp
 		/if (!${Range.Between[1,99999:${Me.Exp}]}) {
@@ -160,11 +167,6 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctAAVitality]}
 		}
 
-
-
-
-
-
 	| Me.Spawn
 
 	| Me.CurrentHPs
@@ -188,10 +190,20 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctHPs]}
 		}
 
-
-
 	| Me.CurrentMana
+		/if (!${Range.Between[0,999999:${Me.CurrentMana}]}) {
+			/invoke ${out[bad, CurrentMana, int, ${Me.CurrentMana}]}
+		} else {
+			/invoke ${out[good, CurrentMana]}
+		}
+
 	| Me.MaxMana
+		/if (!${Range.Between[0,999999:${Me.MaxMana}]}) {
+			/invoke ${out[bad, MaxMana, int, ${Me.MaxMana}]}
+		} else {
+			/invoke ${out[good, MaxMana]}
+		}
+
 	| Me.PctMana
 		/if (!${Range.Between[0,100:${Me.PctMana}]}) {
 			/invoke ${out[bad, PctMana, int, ${Me.PctMana}]}
@@ -200,7 +212,18 @@ sub start_MQ2CharacterType()
 		}
 
 	| Me.CountBuffs
+		/if (!${Range.Between[0,42:${Me.CountBuffs}]}) {
+			/invoke ${out[bad, CountBuffs, int, ${Me.CountBuffs}]}
+		} else {
+			/invoke ${out[good, CountBuffs]}
+		}
 	| Me.CountSongs
+		/if (!${Range.Between[0,30:${Me.CountSongs}]}) {
+			/invoke ${out[bad, CountSongs, int, ${Me.CountSongs}]}
+		} else {
+			/invoke ${out[good, CountSongs]}
+		}
+
 	| Me.BlockedPetBuff
 
 	| Me.BlockedBuff
@@ -208,6 +231,10 @@ sub start_MQ2CharacterType()
 	| Me.Buff
 
 	| Me.Song
+
+
+
+
 	| Me.HPBonus
 	| Me.ManaBonus
 	| Me.CombatEffectsBonus
@@ -311,7 +338,7 @@ sub start_MQ2CharacterType()
 	| Me.CursorCopper
 
 	| Me.AltCurrency
-		/declare _altCurrency[6]
+		/declare _altCurrency[6] string local
 		/varset _altCurrency[1] |Doubloons|Orux|Phosphenes|Phosphites|Faycites|Chronobines|Commemoratives|Nobles|Fists|RadiantCrystals
 		/varset _altCurrency[2] |EbonCrystals|Krono|CursorKrono|EnergyCrystals|PiecesofEight|SilverTokens|GoldTokens|McKenzie|Bayle
 		/varset _altCurrency[3] |Reclamation|Brellium|Motes|RebellionChits|DiamondCoins|BronzeFiats|Voucher|VeliumShards|CrystallizedFear
@@ -343,6 +370,7 @@ sub start_MQ2CharacterType()
 		} else {
 			/invoke ${out[good, AAPoints]}
 		}
+
 	| Me.Combat
 
 	| Me.HPRegen
@@ -352,6 +380,13 @@ sub start_MQ2CharacterType()
 	| Me.EnduranceRegen
 
 	| Me.Grouped
+		/if (${Select[${Me.Grouped},NULL]}) {
+			/invoke ${out[inc, Grouped, int, ${Me.Grouped}]}
+			OUT ....(\a-tcannot test, not grouped\ax)
+		} else {
+			/invoke ${out[good, Grouped]}
+		}
+
 	| Me.GroupList
 
 
@@ -395,7 +430,7 @@ sub start_MQ2CharacterType()
 
 
 	| Me.Language
-		/declare _language[3]
+		/declare _language[3] string local
 		/varset _language[1] |Common Tongue|Barbarian|Erudian|Elvish|Dwarvish|Troll|Ogre|Gnomish|Halfling|Theves Cant|Old Erudian
 		/varset _language[2] |Elder Elvish|Froglock|Goblin|Gnoll|Combine Tongue|Elder Teir'Dal|Lizardman|Orcish|Faerie|Dragon
 		/varset _language[3] |Elder Dragon|Dark Speech|Vah Shir|Alarian|Hadal
@@ -573,8 +608,31 @@ sub start_MQ2CharacterType()
 
 
 	| Me.Mercenary
+	/if (${Select[${Me.Mercenary},SUSPENDED]}) {
+		/invoke ${out[inc, Mercenary, string, ${Me.Mercenary}]}
+		OUT ....(\a-tneed a merc to test with\ax)
+	} else /if (!${Me.Mercenary.ID}) {
+		/invoke ${out[bad, Mercenary, string, ${Me.Mercenary}]}
+	} else {
+		/invoke ${out[good, Mercenary, string, ${Me.Mercenary}]}
+	}
+
+
 	| Me.MercenaryStance
+	/if (${Select[${Me.Mercenary},SUSPENDED]}) {
+		/invoke ${out[inc, MercenaryStance, string, ${Me.MercenaryStance}]}
+		OUT ....(\a-tneed a merc to test with\ax)
+	} else /if (!${Select[${Me.MercenaryStance},Reactive,Balanced,Effeicient,Passive,Burn,Aggressive,Assist]}) {
+		/invoke ${out[bad, MercenaryStance, string, ${Me.MercenaryStance}]}
+	} else {
+		/invoke ${out[good, MercenaryStance, string, ${Me.MercenaryStance}]}
+	}
+
+
+
 	| Me.PctMercAAExp
+
+
 	| Me.MercAAExp
 	| Me.MercAAPoints
 	| Me.MercAAPointsSpent
@@ -596,7 +654,11 @@ sub start_MQ2CharacterType()
 	| Me.GemTimer
 
 	| Me.HaveExpansion
-
+		/if (!${Me.HaveExpansion[The Ruins of Kunark]}) {
+			/invoke ${out[bad, HaveExpansion[The Ruins of Kunark], int, ${Me.HaveExpansion[The Ruins of Kunark]}]}
+		} else {
+			/invoke ${out[good, HaveExpansion[The Ruins of Kunark]]}
+		}
 
 	| Me.PctAggro
 	| Me.SecondaryPctAggro
@@ -629,8 +691,18 @@ sub start_MQ2CharacterType()
 	| Me.Snared
 	| Me.Hasted
 
+
+
+
+
+
 	| Me.LastZoned
+		/invoke ${out[inc, LastZoned, int, ${Me.LastZoned}]}
+		OUT ....(\a-ti refuse to do this one\ax)
+
 	| Me.Zoning
+		/invoke ${out[inc, Zoning, int, ${Me.Zoning}]}
+		OUT ....(\a-tuseless damn commands\ax)
 
 
 

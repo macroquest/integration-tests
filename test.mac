@@ -102,3 +102,52 @@ sub out(string _gb, string _name, string _expect, string _got)
 sub test_return_string()
  | empty
 /return ${outerString}
+
+
+
+
+
+
+|**
+ * checks if you have the expansion id returns T/F
+ * expansion order is in list by array number
+ * /call check_expansion [##]
+ **|
+sub check_expansion(int _expid)
+
+	/declare _exp[26] string local
+	/varset _exp[1] The Ruins of Kunark
+	/varset _exp[2] The Scars of Velious
+	/varset _exp[3] The Shadows of Luclin
+	/varset _exp[4] The Planes of Power
+	/varset _exp[5] The Legacy of Ykesha
+	/varset _exp[6] Lost Dungeons of Norrath
+	/varset _exp[7] Gates of Discord
+	/varset _exp[8] Omens of War
+	/varset _exp[9] Dragons of Norrath
+	/varset _exp[10] Depths of Darkhollow
+	/varset _exp[11] Prophecy of Ro
+	/varset _exp[12] The Serpent's Spine
+	/varset _exp[13] The Buried Sea
+	/varset _exp[14] Secrets of Faydwer
+	/varset _exp[15] Seeds of Destruction
+	/varset _exp[16] Underfoot
+	/varset _exp[17] House of Thule
+	/varset _exp[18] Veil of Alaris
+	/varset _exp[19] Rain of Fear
+	/varset _exp[20] Call of the Forsaken
+	/varset _exp[21] The Darkened Sea
+	/varset _exp[22] The Broken Mirror
+	/varset _exp[23] Empires of Kunark
+	/varset _exp[24] Ring of Scale
+	/varset _exp[25] The Burning Lands
+	/varset _exp[26] Torment of Velious
+
+
+	/if (${Me.HaveExpansion[${_exp[${_expid}]}]})
+
+
+
+/return
+
+${Me.HaveExpansion[The Ruins of Kunark]}
