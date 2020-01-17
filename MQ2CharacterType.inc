@@ -3,7 +3,8 @@
 
 sub start_MQ2CharacterType()
 	/echo
-	OUT Testing::\awMQ2CharacterType\ax
+	OUT Testing::\awMQ2CharacterType\ax (\a-tMe.\ax)
+	LOG
 	LOG Testing::MQ2CharacterType
 
 	| reuse variables
@@ -104,23 +105,100 @@ sub start_MQ2CharacterType()
 
 
 	| Me.Exp
+		/if (!${Range.Between[1,99999:${Me.Exp}]}) {
+			/invoke ${out[bad, Exp, int, ${Me.Exp}]}
+		} else {
+			/invoke ${out[good, Exp]}
+		}
+
 	| Me.PctExp
+		/if (!${Range.Between[1,100:${Me.PctExp}]}) {
+			/invoke ${out[bad, PctExp, int, ${Me.PctExp}]}
+		} else {
+			/invoke ${out[good, PctExp]}
+		}
+
 	| Me.PctExpToAA
+		/if (!${Range.Between[0,100:${Me.PctExpToAA}]}) {
+			/invoke ${out[bad, PctExpToAA, int, ${Me.PctExpToAA}]}
+		} else {
+			/invoke ${out[good, PctExpToAA]}
+		}
+
 	| Me.PctAAExp
+		/if (!${Range.Between[0,100:${Me.PctAAExp}]}) {
+			/invoke ${out[bad, PctAAExp, int, ${Me.PctAAExp}]}
+		} else {
+			/invoke ${out[good, PctAAExp]}
+		}
+
 	| Me.Vitality
+		/if (!${Range.Between[0,100:${Me.Vitality}]}) {
+			/invoke ${out[bad, Vitality, int, ${Me.Vitality}]}
+		} else {
+			/invoke ${out[good, Vitality]}
+		}
+
 	| Me.PctVitality
+		/if (!${Range.Between[0,100:${Me.PctVitality}]}) {
+			/invoke ${out[bad, PctVitality, int, ${Me.PctVitality}]}
+		} else {
+			/invoke ${out[good, PctVitality]}
+		}
+
 	| Me.AAVitality
+		/if (!${Range.Between[0,100:${Me.AAVitality}]}) {
+			/invoke ${out[bad, AAVitality, int, ${Me.AAVitality}]}
+		} else {
+			/invoke ${out[good, Vitality]}
+		}AAVitality
+
 	| Me.PctAAVitality
+		/if (!${Range.Between[0,100:${Me.PctAAVitality}]}) {
+			/invoke ${out[bad, PctAAVitality, int, ${Me.PctAAVitality}]}
+		} else {
+			/invoke ${out[good, PctAAVitality]}
+		}
+
+
+
 
 
 
 	| Me.Spawn
+
 	| Me.CurrentHPs
+		/if (!${Range.Between[0,999999:${Me.CurrentHPs}]}) {
+			/invoke ${out[bad, CurrentHPs, int, ${Me.CurrentHPs}]}
+		} else {
+			/invoke ${out[good, CurrentHPs]}
+		}
+
 	| Me.MaxHPs
+		/if (!${Range.Between[0,999999:${Me.MaxHPs}]}) {
+			/invoke ${out[bad, MaxHPs, int, ${Me.MaxHPs}]}
+		} else {
+			/invoke ${out[good, MaxHPs]}
+		}
+
 	| Me.PctHPs
+		/if (!${Range.Between[0,100:${Me.PctHPs}]}) {
+			/invoke ${out[bad, PctHPs, int, ${Me.PctHPs}]}
+		} else {
+			/invoke ${out[good, PctHPs]}
+		}
+
+
+
 	| Me.CurrentMana
 	| Me.MaxMana
 	| Me.PctMana
+		/if (!${Range.Between[0,100:${Me.PctMana}]}) {
+			/invoke ${out[bad, PctMana, int, ${Me.PctMana}]}
+		} else {
+			/invoke ${out[good, PctMana]}
+		}
+
 	| Me.CountBuffs
 	| Me.CountSongs
 	| Me.BlockedPetBuff
@@ -309,10 +387,20 @@ sub start_MQ2CharacterType()
 
 	| Me.LanguageSkill
 		/if (!${Range.Between[0,100:${Me.LanguageSkill[common]}]}) {
-			/invoke ${out[bad, LanguageSkill[\a-tcommon\ax], int, ${Me.LanguageSkill[common]}]}
+			/invoke ${out[bad, LanguageSkill[common], int, ${Me.LanguageSkill[common]}]}
 		} else {
-			/invoke ${out[good, LanguageSkill[\a-tcommon\ax]]}
+			/invoke ${out[good, LanguageSkill[common]]}
 		}
+
+
+
+	| Me.Language
+		/declare _language[3]
+		/varset _language[1] |Common Tongue|Barbarian|Erudian|Elvish|Dwarvish|Troll|Ogre|Gnomish|Halfling|Theves Cant|Old Erudian
+		/varset _language[2] |Elder Elvish|Froglock|Goblin|Gnoll|Combine Tongue|Elder Teir'Dal|Lizardman|Orcish|Faerie|Dragon
+		/varset _language[3] |Elder Dragon|Dark Speech|Vah Shir|Alarian|Hadal
+
+
 
 
 
@@ -330,8 +418,10 @@ sub start_MQ2CharacterType()
 			OUT ....(\a-tmotion test\ax)
 		}
 
+
+
 	| Me.Running
-		/if (!${Me.Running}) {
+		/if (!${Select[${Me.Running},TRUE,FALSE]}) {
 			/invoke ${out[bad, Running, bool, ${Me.Running}]}
 		} else {
 			/invoke ${out[good, Running]}
@@ -349,43 +439,41 @@ sub start_MQ2CharacterType()
 
 	| Me.AltAbilityTimer
 		/if (!${Range.Between[0,100:${Me.AltAbilityTimer[origin]}]}) {
-			/invoke ${out[bad, AltAbilityTimer[\a-torigin\ax], int, ${Me.AltAbilityTimer[origin]}]}
+			/invoke ${out[bad, AltAbilityTimer[origin], int, ${Me.AltAbilityTimer[origin]}]}
 		} else {
-			/invoke ${out[good, AltAbilityTimer[\a-torigin\ax]]}
+			/invoke ${out[good, AltAbilityTimer[origin]]}
 		}
 
 
 	| Me.AltTimerReady
 		/if (!${Me.AltTimerReady[origin]}) {
-			/invoke ${out[bad, AltTimerReady[\a-torigin\ax], bool, ${Me.AltTimerReady[origin]}]}
+			/invoke ${out[bad, AltTimerReady[origin], bool, ${Me.AltTimerReady[origin]}]}
 		} else {
-			/invoke ${out[good, AltTimerReady[\a-torigin\ax]]}
+			/invoke ${out[good, AltTimerReady[origin]]}
 		}
 
 	| Me.AltAbilityReady
 		/if (!${Me.AltAbilityReady[origin]}) {
-			/invoke ${out[bad, AltAbilityReady[\a-torigin\ax], bool, ${Me.AltAbilityReady[origin]}]}
+			/invoke ${out[bad, AltAbilityReady[origin], bool, ${Me.AltAbilityReady[origin]}]}
 		} else {
-			/invoke ${out[good, AltAbilityReady[\a-torigin\ax]]}
+			/invoke ${out[good, AltAbilityReady[origin]]}
 		}
 
 	| Me.AltAbility
 		/if (${Me.AltAbility[origin]} != 331) {
-			/invoke ${out[bad, AltAbility[\a-torigin\ax], int, ${Me.AltAbility[origin]}]}
+			/invoke ${out[bad, AltAbility[origin], int, ${Me.AltAbility[origin]}]}
 		} else {
-			/invoke ${out[good, AltAbility[\a-torigin\ax]]}
+			/invoke ${out[good, AltAbility[origin]]}
 		}
-
-
 
 	| Skill, SkillBase, SkillCap
 		/varset _MemberList |Skill|SkillBase|SkillCap
 		/for _count 1 to ${_MemberList.Count[|]}
 			/varset _stat ${_MemberList.Arg[${_count},|]}
 			/if (!${Range.Between[1,99999:${Me.${_stat}[alcohol tolerance]}]}) {
-				/invoke ${out[bad, ${_stat}[\a-talcohol tolerance\ax], int, ${Me.${_stat}[alcohol tolerance]}]}
+				/invoke ${out[bad, ${_stat}[alcohol tolerance], int, ${Me.${_stat}[alcohol tolerance]}]}
 			} else {
-				/invoke ${out[good, ${_stat}[\a-talcohol tolerance\ax]]}
+				/invoke ${out[good, ${_stat}[alcohol tolerance]]}
 			}
 		/next _count
 
@@ -441,7 +529,6 @@ sub start_MQ2CharacterType()
 
 	| Me.AutoFire
 
-	| Me.Language
 
 	| Me.Aura
 

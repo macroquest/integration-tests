@@ -3,12 +3,13 @@
 
 sub start_MQ2MacroType()
 	/echo
-	OUT Testing::\awMQ2MacroType\ax
+	OUT Testing::\awMQ2MacroType\ax (\a-tMacro.\ax)
+	LOG
 	LOG Testing::MQ2MacroType
 
 	| Macro.Name
-		/if (${Macro.Name.NotEqual[mqtest\test.mac]}) {
-			/invoke ${out[bad, Name, "mqtest\test.mac", ${Macro.Name}]}
+		/if (${Macro.Name.NotEqual[testsuite\test.mac]}) {
+			/invoke ${out[bad, Name, "testsuite\test.mac", ${Macro.Name}]}
 		} else {
 			/invoke ${out[good, Name]}
 		}

@@ -39,6 +39,10 @@ sub main(Param0)
 	| outer bool
 	/declare outerBool bool outer TRUE
 
+
+	| hide visual PASSing tests
+	/declare hidePass bool outer FALSE
+
 	| fake a Param if one is not pased
 	/if (!${Bool[${Param0}]}) {
 		/varset Param0 bob
@@ -50,6 +54,8 @@ sub main(Param0)
 
 
 	/echo
+	OUT \agTesting Completed\ax
+
 /return
 
 
@@ -64,16 +70,27 @@ sub out(string _gb, string _name, string _expect, string _got)
 
 	/if (${_gb.Equal[good]}) {
 		LOG ..${_name} .. pass
-		OUT ..${_name} .. GOOD
+		/if (!${hidePass}) {
+			OUT ..${_name} .. GOOD
+		}
 	} else /if (${_gb.Equal[bad]}) {
 		LOG ..${_name} .. FAIL.. expect:${_expect} got:${_got}
 		OUT ..\aw${_name}\ax .. BAD
 		OUT ....expect: \at${_expect}\ax ....got: \at${_got}\ax
 	} else /if (${_gb.Equal[inc]}) {
-		LOG ..${_name} .. INCOMPLETE.. unable to test on this run
+		LOG ..${_name} .. incomplete.. unable to test on this run
 		OUT ..\aw${_name}\ax .. INC
 		OUT ....expect: \at${_expect}\ax ....got: \at${_got}\ax
 	}
+
+	/if (${_gb.Equal[inc]}) {
+		/delay 5
+	} else /if (${_gb.Equal[bad]}) {
+		/delay 2s
+	} else /if (!${hidePass}) {
+		/delay 1
+	}
+
 
 /return
 
