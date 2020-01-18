@@ -18,6 +18,8 @@
 #define BAD "\arfail\ax"
 #define INC "\ayincomplete\ax"
 
+
+#include TestSuite\RequirementsTest.inc
 #include TestSuite\MQ2MacroType.inc
 #include TestSuite\MQ2CharacterType.inc
 
@@ -49,6 +51,7 @@ sub main(Param0)
 	}
 
 
+	/call start_RequirementsTest
 	/call start_MQ2MacroType
 	/call start_MQ2CharacterType
 
@@ -112,7 +115,7 @@ sub test_return_string()
  * checks if you have the expansion id returns T/F
  * expansion order is in list by array number
  * /call check_expansion [##]
- **|
+
 sub check_expansion(int _expid)
 
 	/declare _exp[26] string local
@@ -151,3 +154,5 @@ sub check_expansion(int _expid)
 /return
 
 ${Me.HaveExpansion[The Ruins of Kunark]}
+
+ **|

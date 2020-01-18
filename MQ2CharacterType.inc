@@ -1,3 +1,12 @@
+|***
+ * TestSuite.mac
+ * MQ2DataTypes.cpp
+ * testing MQ2CharacterType
+ *
+ ***|
+
+
+
 
 
 
@@ -8,70 +17,89 @@ sub start_MQ2CharacterType()
 	LOG Testing::MQ2CharacterType
 
 	| reuse variables
-	/declare _count int local 0
-	/declare _countArray int local 0
-	/declare _stat string local
-	/declare _MemberList string local
-	/declare _tmpSwitch bool local FALSE
-	/declare _tmpString string local
+		/declare _count int local 0
+		/declare _countArray int local 0
+		/declare _MemberList string local
+		/declare _tmpMember string local
+		/declare _tmpSwitch bool local FALSE
+		/declare _tmpString string local
 
 
-	| STR, STA, AGI, DEX, WIS, INT, CHA, LCK
-		/varset _MemberList |STR|STA|AGI|DEX|WIS|INT|CHA|LCK
+	| STR, STA, AGI, DEX, WIS, INT, CHA
+		/varset _MemberList |STR|STA|AGI|DEX|WIS|INT|CHA
 		/for _count 1 to ${_MemberList.Count[|]}
-			/varset _stat ${_MemberList.Arg[${_count},|]}
+			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
 
-			/if (!${Range.Between[1,99999:${Me.${_stat}}]}) {
-				/invoke ${out[bad, ${_stat}, int, ${Me.${_stat}}]}
+			/if (!${Range.Between[1,99999:${Me.${_tmpMember}}]}) {
+				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
-				/invoke ${out[good, ${_stat}]}
+				/invoke ${out[good, ${_tmpMember}]}
 			}
 		/next _count
+
+
+	| LCK
+		/if (!${Range.Between[0,99999:${Me.LCK}]}) {
+			/invoke ${out[bad, LCK, int, ${Me.LCK}]}
+		} else {
+			/invoke ${out[good, ${Me.LCK}]}
+		}
+
 
 	| BaseSTR, BaseSTA, BaseAGI, BaseDEX, BaseWIS, BaseINT, BaseCHA
 		/varset _MemberList |BaseSTR|BaseSTA|BaseAGI|BaseDEX|BaseWIS|BaseINT|BaseCHA
 		/for _count 1 to ${_MemberList.Count[|]}
-			/varset _stat ${_MemberList.Arg[${_count},|]}
+			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
 
-			/if (!${Range.Between[1,99999:${Me.${_stat}}]}) {
-				/invoke ${out[bad, ${_stat}, int, ${Me.${_stat}}]}
+			/if (!${Range.Between[1,300:${Me.${_tmpMember}}]}) {
+				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
-				/invoke ${out[good, ${_stat}]}
+				/invoke ${out[good, ${_tmpMember}]}
 			}
 		/next _count
+
 
 	| svMagic, svFire, svCold, svPoison, svDisease, svCorruption, svPrismatic, svChromatic
 		/varset _MemberList |svMagic|svFire|svCold|svPoison|svDisease|svCorruption|svPrismatic|svChromatic
 		/for _count 1 to ${_MemberList.Count[|]}
-			/varset _stat ${_MemberList.Arg[${_count},|]}
+			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
 
-			/if (!${Range.Between[1,99999:${Me.${_stat}}]}) {
-				/invoke ${out[bad, ${_stat}, int, ${Me.${_stat}}]}
+			/if (!${Range.Between[1,9999:${Me.${_tmpMember}}]}) {
+				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
-				/invoke ${out[good, ${_stat}]}
+				/invoke ${out[good, ${_tmpMember}]}
 			}
 		/next _count
 
-	| HeroicINTBonus, HeroicWISBonus, HeroicAGIBonus, HeroicDEXBonus, HeroicSTABonus, HeroicCHABonus
-		/varset _MemberList |HeroicINTBonus|HeroicWISBonus|HeroicAGIBonus|HeroicDEXBonus|HeroicSTABonus|HeroicCHABonus
+
+	| HeroicINTBonus, HeroicWISBonus, HeroicAGIBonus, HeroicDEXBonus, HeroicSTABonus, HeroicCHABonus, HeroicSTRBonus
+		/varset _MemberList |HeroicINTBonus|HeroicWISBonus|HeroicAGIBonus|HeroicDEXBonus|HeroicSTABonus|HeroicCHABonus|HeroicSTRBonus
 		/for _count 1 to ${_MemberList.Count[|]}
-			/varset _stat ${_MemberList.Arg[${_count},|]}
+			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
 
-			/if (!${Range.Between[1,99999:${Me.${_stat}}]}) {
-				/invoke ${out[bad, ${_stat}, int, ${Me.${_stat}}]}
+			/if (!${Range.Between[0,9999:${Me.${_tmpMember}}]}) {
+				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
-				/invoke ${out[good, ${_stat}]}
+				/invoke ${out[good, ${_tmpMember}]}
 			}
 		/next _count
+
 
 	| Me.CurrentWeight
-		/if (!${Range.Between[1,99999:${Me.CurrentWeight}]}) {
+		/if (!${Range.Between[1,999999:${Me.CurrentWeight}]}) {
 			/invoke ${out[bad, CurrentWeight, int, ${Me.CurrentWeight}]}
 		} else {
 			/invoke ${out[good, CurrentWeight]}
 		}
 
+
 	| Me.Name
+		/if (!${Range.Between[4,24:${Me.Name.Length}]}) {
+			/invoke ${out[bad, Name, int, ${Me.Name.Length}]}
+		} else {
+			/invoke ${out[good, Name]}
+		}
+
 
 	| Me.Origin
 		/varset _tmpSwitch FALSE
@@ -96,6 +124,8 @@ sub start_MQ2CharacterType()
 		} else {
 			/invoke ${out[good, Origin]}
 		}
+		/deletevar _origin
+
 
 	| Me.SubscriptionDays
 		/if (!${Range.Between[-1,365:${Me.SubscriptionDays}]}) {
@@ -104,6 +134,7 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, SubscriptionDays]}
 		}
 
+
 	| Me.Subscription
 		/if (!${Select[${Me.Subscription},FREE,SILVER,GOLD]}) {
 			/invoke ${out[bad, Subscription, "string (FREE|SILVER|GOLD)", ${Me.Subscription}]}
@@ -111,12 +142,15 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, Subscription]}
 		}
 
+
 	| Me.Exp
+	| exp is returning an int of ##### eg 42862 or 42.862% to the end user screen
 		/if (!${Range.Between[1,99999:${Me.Exp}]}) {
 			/invoke ${out[bad, Exp, int, ${Me.Exp}]}
 		} else {
 			/invoke ${out[good, Exp]}
 		}
+
 
 	| Me.PctExp
 		/if (!${Range.Between[1,100:${Me.PctExp}]}) {
@@ -125,12 +159,14 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctExp]}
 		}
 
+
 	| Me.PctExpToAA
 		/if (!${Range.Between[0,100:${Me.PctExpToAA}]}) {
 			/invoke ${out[bad, PctExpToAA, int, ${Me.PctExpToAA}]}
 		} else {
 			/invoke ${out[good, PctExpToAA]}
 		}
+
 
 	| Me.PctAAExp
 		/if (!${Range.Between[0,100:${Me.PctAAExp}]}) {
@@ -139,12 +175,14 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctAAExp]}
 		}
 
+
 	| Me.Vitality
 		/if (!${Range.Between[0,100:${Me.Vitality}]}) {
 			/invoke ${out[bad, Vitality, int, ${Me.Vitality}]}
 		} else {
 			/invoke ${out[good, Vitality]}
 		}
+
 
 	| Me.PctVitality
 		/if (!${Range.Between[0,100:${Me.PctVitality}]}) {
@@ -153,12 +191,14 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctVitality]}
 		}
 
+
 	| Me.AAVitality
 		/if (!${Range.Between[0,100:${Me.AAVitality}]}) {
 			/invoke ${out[bad, AAVitality, int, ${Me.AAVitality}]}
 		} else {
 			/invoke ${out[good, Vitality]}
-		}AAVitality
+		}
+
 
 	| Me.PctAAVitality
 		/if (!${Range.Between[0,100:${Me.PctAAVitality}]}) {
@@ -167,7 +207,9 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctAAVitality]}
 		}
 
+
 	| Me.Spawn
+
 
 	| Me.CurrentHPs
 		/if (!${Range.Between[0,999999:${Me.CurrentHPs}]}) {
@@ -176,12 +218,14 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, CurrentHPs]}
 		}
 
+
 	| Me.MaxHPs
 		/if (!${Range.Between[0,999999:${Me.MaxHPs}]}) {
 			/invoke ${out[bad, MaxHPs, int, ${Me.MaxHPs}]}
 		} else {
 			/invoke ${out[good, MaxHPs]}
 		}
+
 
 	| Me.PctHPs
 		/if (!${Range.Between[0,100:${Me.PctHPs}]}) {
@@ -190,12 +234,14 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctHPs]}
 		}
 
+
 	| Me.CurrentMana
 		/if (!${Range.Between[0,999999:${Me.CurrentMana}]}) {
 			/invoke ${out[bad, CurrentMana, int, ${Me.CurrentMana}]}
 		} else {
 			/invoke ${out[good, CurrentMana]}
 		}
+
 
 	| Me.MaxMana
 		/if (!${Range.Between[0,999999:${Me.MaxMana}]}) {
@@ -204,6 +250,7 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, MaxMana]}
 		}
 
+
 	| Me.PctMana
 		/if (!${Range.Between[0,100:${Me.PctMana}]}) {
 			/invoke ${out[bad, PctMana, int, ${Me.PctMana}]}
@@ -211,18 +258,22 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, PctMana]}
 		}
 
+
 	| Me.CountBuffs
 		/if (!${Range.Between[0,42:${Me.CountBuffs}]}) {
 			/invoke ${out[bad, CountBuffs, int, ${Me.CountBuffs}]}
 		} else {
 			/invoke ${out[good, CountBuffs]}
 		}
+
+
 	| Me.CountSongs
 		/if (!${Range.Between[0,30:${Me.CountSongs}]}) {
 			/invoke ${out[bad, CountSongs, int, ${Me.CountSongs}]}
 		} else {
 			/invoke ${out[good, CountSongs]}
 		}
+
 
 	| Me.BlockedPetBuff
 
@@ -234,36 +285,23 @@ sub start_MQ2CharacterType()
 
 
 
+	| test bonus foci
+		/declare _focus[4] string local
+		/varset _focus[1] |HPRegen|ManaRegen|HPBonus|ManaBonus|CombatEffectsBonus|ShieldingBonus|SpellShieldBonus|AvoidanceBonus|AccuracyBonus
+		/varset _focus[2] |StunResistBonus|StrikeThroughBonus|DoTShieldBonus|AttackBonus|HPRegenBonus|ManaRegenBonus|DamageShieldBonus
+		/varset _focus[3] |DamageShieldMitigationBonus|HealAmountBonus|SpellDamageBonus|ClairvoyanceBonus|EnduranceRegenBonus|AttackSpeed
+		/varset _focus[4] |CurrentEndurance|MaxEndurance|PctEndurance|EnduranceRegen
 
-	| Me.HPBonus
-	| Me.ManaBonus
-	| Me.CombatEffectsBonus
-	| Me.ShieldingBonus
-	| Me.SpellShieldBonus
-	| Me.AvoidanceBonus
-	| Me.AccuracyBonus
-	| Me.StunResistBonus
-
-	| Me.StrikeThroughBonus
-	| Me.DoTShieldBonus
-	| Me.AttackBonus
-	| Me.HPRegenBonus
-
-	| Me.ManaRegenBonus
-	| Me.DamageShieldBonus
-
-	| Me.DamageShieldMitigationBonus
-
-	| Me.HeroicSTRBonus
-
-	| Me.HealAmountBonus
-	| Me.SpellDamageBonus
-	| Me.ClairvoyanceBonus
-	| Me.EnduranceRegenBonus
-	| Me.AttackSpeed
-	| Me.CurrentEndurance
-	| Me.MaxEndurance
-	| Me.PctEndurance
+		/for _countArray 1 to ${_focus.Size}
+			/for _count 1 to ${_focus[${_countArray}].Count[|]}
+				/if (!${Range.Between[0,999999:${Me.${_focus[${_countArray}].Arg[${_count},|]}}]}) {
+					/invoke ${out[bad, ${_focus[${_countArray}].Arg[${_count},|]}, int, ${Me.${_focus[${_countArray}].Arg[${_count},|]}}]}
+				} else {
+					/invoke ${out[good, ${_focus[${_countArray}].Arg[${_count},|]}]}
+				}
+			/next _count
+		/next _countArray
+		/deletevar _focus
 
 
 
@@ -273,8 +311,7 @@ sub start_MQ2CharacterType()
 	| Me.TakEarned
 	| Me.MirEarned
 	| Me.LDoNPoints
-	| Me.CurrentFavor
-	| Me.CareerFavor
+
 
 
 	| Me.Inventory
@@ -301,28 +338,28 @@ sub start_MQ2CharacterType()
 	| Cash, Platinum, Gold, Silver, Copper
 		/varset _MemberList |Cash|Platinum|Gold|Silver|Copper
 		/for _count 1 to ${_MemberList.Count[|]}
-			/varset _stat ${_MemberList.Arg[${_count},|]}
+			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
 
-			/if (!${Range.Between[0,999999999999:${Me.${_stat}}]}) {
-				/invoke ${out[bad, ${_stat}, int, ${Me.${_stat}}]}
+			/if (!${Range.Between[0,999999999999:${Me.${_tmpMember}}]}) {
+				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
-				/invoke ${out[good, ${_stat}]}
+				/invoke ${out[good, ${_tmpMember}]}
 			}
 		/next _count
-
 
 
 	| CashBank, PlatinumBank, GoldBank, CursorSilver, CopperBank
 		/varset _MemberList |CashBank|PlatinumBank|GoldBank|SilverBank|CopperBank
 		/for _count 1 to ${_MemberList.Count[|]}
-			/varset _stat ${_MemberList.Arg[${_count},|]}
+			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
 
-			/if (!${Range.Between[0,999999999999:${Me.${_stat}}]}) {
-				/invoke ${out[bad, ${_stat}, int, ${Me.${_stat}}]}
+			/if (!${Range.Between[0,999999999999:${Me.${_tmpMember}}]}) {
+				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
-				/invoke ${out[good, ${_stat}]}
+				/invoke ${out[good, ${_tmpMember}]}
 			}
 		/next _count
+
 
 	| Me.PlatinumShared
 		/if (!${Range.Between[0,999999999999:${Me.PlatinumShared}]}) {
@@ -355,6 +392,7 @@ sub start_MQ2CharacterType()
 				}
 			/next _count
 		/next _countArray
+		/deletevar _altCurrency
 
 
 	| Me.AAExp
@@ -371,13 +409,29 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, AAPoints]}
 		}
 
+
 	| Me.Combat
+		/declare _combatactive bool local FALSE
+		/declare _combatinactive bool local FALSE
+		/squelch /target clear
+		/attack off
+		/if (!${Me.Combat}) {
+			/varse _combatinactive TRUE
+		}
+		/attack on
+		/if (${Me.Combat}) {
+			/varse _combatactive TRUE
+		}
+		/attack off
+		/if (!${_combatinactive} || !${_combatactive}) {
+			/invoke ${out[bad, Combat, bool, ${Me.Combat}]}
+			OUT ....(\a-tcheck targeting\ax)
+		} else {
+			/invoke ${out[good, Combat]}
+		}
+		/deletevar _combatactive
+		/deletevar _combatinactive
 
-	| Me.HPRegen
-
-	| Me.ManaRegen
-
-	| Me.EnduranceRegen
 
 	| Me.Grouped
 		/if (${Select[${Me.Grouped},NULL]}) {
@@ -390,9 +444,40 @@ sub start_MQ2CharacterType()
 	| Me.GroupList
 
 
+	| Me.GroupSize
+		/if (${Select[${Me.Grouped},NULL]}) {
+			/invoke ${out[inc, Grouped, int, ${Me.Grouped}]}
+			OUT ....(\a-tcannot test, not grouped\ax)
+		} else /if (!${Range.Between[1,6:${Me.GroupSize}]}) {
+			/invoke ${out[bad, GroupSize, int, ${Me.GroupSize}]}
+		} else {
+			/invoke ${out[good, GroupSize]}
+		}
+
+
 	| Me.AmIGroupLeader
+		/if (${Select[${Me.Grouped},NULL]}) {
+			/invoke ${out[inc, AmIGroupLeader, bool, ${Me.AmIGroupLeader}]}
+			OUT ....(\a-tcannot test, not grouped\ax)
+		} else /if (!${Me.AmIGroupLeader} || ${Me.AmIGroupLeader}) {
+			/invoke ${out[good, AmIGroupLeader]}
+		}
+
+
 	| Me.MaxBuffSlots
+		/if (!${Range.Between[1,42:${Me.MaxBuffSlots}]}) {
+			/invoke ${out[bad, MaxBuffSlots, int, ${Me.MaxBuffSlots}]}
+		} else {
+			/invoke ${out[good, MaxBuffSlots]}
+		}
+
+
 	| Me.FreeBuffSlots
+		/if (!${Range.Between[1,42:${Me.FreeBuffSlots}]}) {
+			/invoke ${out[bad, FreeBuffSlots, int, ${Me.FreeBuffSlots}]}
+		} else {
+			/invoke ${out[good, FreeBuffSlots]}
+		}
 
 	| Me.Gem
 		/if (!${Select[${Me.Class.ShortName},WAR,ROG,BER,MON]}) {
@@ -428,15 +513,22 @@ sub start_MQ2CharacterType()
 		}
 
 
-
 	| Me.Language
 		/declare _language[3] string local
 		/varset _language[1] |Common Tongue|Barbarian|Erudian|Elvish|Dwarvish|Troll|Ogre|Gnomish|Halfling|Theves Cant|Old Erudian
 		/varset _language[2] |Elder Elvish|Froglock|Goblin|Gnoll|Combine Tongue|Elder Teir'Dal|Lizardman|Orcish|Faerie|Dragon
 		/varset _language[3] |Elder Dragon|Dark Speech|Vah Shir|Alarian|Hadal
 
-
-
+		/for _countArray 1 to ${_language.Size}
+			/for _count 1 to ${_language[${_countArray}].Count[|]}
+				/if (!${Range.Between[0,100:${Me.Language[${_language[${_countArray}].Arg[${_count},|]}]}]}) {
+					/invoke ${out[bad, Language[${_language[${_countArray}].Arg[${_count},|]}], int, ${Me.${_language[${_countArray}].Arg[${_count},|]}}]}
+				} else {
+					/invoke ${out[good, Language[${_language[${_countArray}].Arg[${_count},|]}]]}
+				}
+			/next _count
+		/next _countArray
+		/deletevar _language
 
 
 	| Me.CombatAbility
@@ -454,7 +546,6 @@ sub start_MQ2CharacterType()
 		}
 
 
-
 	| Me.Running
 		/if (!${Select[${Me.Running},TRUE,FALSE]}) {
 			/invoke ${out[bad, Running, bool, ${Me.Running}]}
@@ -462,8 +553,21 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, Running]}
 		}
 
+
 	| Me.Hunger
+		/if (!${Range.Between[0,10000:${Me.Hunger}]}) {
+			/invoke ${out[bad, Hunger, int, ${Me.Hunger}]}
+		} else {
+			/invoke ${out[good, Hunger]}
+		}
+
+
 	| Me.Thirst
+		/if (!${Range.Between[0,10000:${Me.Thirst}]}) {
+			/invoke ${out[bad, Thirst, int, ${Me.Thirst}]}
+		} else {
+			/invoke ${out[good, Thirst]}
+		}
 
 	| Me.Drunk
 		/if (!${Range.Between[0,100:${Me.Drunk}]}) {
@@ -471,6 +575,7 @@ sub start_MQ2CharacterType()
 		} else {
 			/invoke ${out[good, Drunk]}
 		}
+
 
 	| Me.AltAbilityTimer
 		/if (!${Range.Between[0,100:${Me.AltAbilityTimer[origin]}]}) {
@@ -487,12 +592,14 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, AltTimerReady[origin]]}
 		}
 
+
 	| Me.AltAbilityReady
 		/if (!${Me.AltAbilityReady[origin]}) {
 			/invoke ${out[bad, AltAbilityReady[origin], bool, ${Me.AltAbilityReady[origin]}]}
 		} else {
 			/invoke ${out[good, AltAbilityReady[origin]]}
 		}
+
 
 	| Me.AltAbility
 		/if (${Me.AltAbility[origin]} != 331) {
@@ -501,14 +608,15 @@ sub start_MQ2CharacterType()
 			/invoke ${out[good, AltAbility[origin]]}
 		}
 
+
 	| Skill, SkillBase, SkillCap
 		/varset _MemberList |Skill|SkillBase|SkillCap
 		/for _count 1 to ${_MemberList.Count[|]}
-			/varset _stat ${_MemberList.Arg[${_count},|]}
-			/if (!${Range.Between[1,99999:${Me.${_stat}[alcohol tolerance]}]}) {
-				/invoke ${out[bad, ${_stat}[alcohol tolerance], int, ${Me.${_stat}[alcohol tolerance]}]}
+			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
+			/if (!${Range.Between[1,99999:${Me.${_tmpMember}[alcohol tolerance]}]}) {
+				/invoke ${out[bad, ${_tmpMember}[alcohol tolerance], int, ${Me.${_tmpMember}[alcohol tolerance]}]}
 			} else {
-				/invoke ${out[good, ${_stat}[alcohol tolerance]]}
+				/invoke ${out[good, ${_tmpMember}[alcohol tolerance]]}
 			}
 		/next _count
 
@@ -549,11 +657,12 @@ sub start_MQ2CharacterType()
 
 	| Me.TributeActive
 	| Me.TributeTimer
+	| Me.CurrentFavor
+	| Me.CareerFavor
 
 
 
 
-	| Me.GroupSize
 
 
 
@@ -600,33 +709,26 @@ sub start_MQ2CharacterType()
 
 	| Dar ???
 
-	| Me.TotalCounters
-	| Me.CountersDisease
-	| Me.CountersPoison
-	| Me.CountersCurse
-	| Me.CountersCorruption
-
-
 	| Me.Mercenary
-	/if (${Select[${Me.Mercenary},SUSPENDED]}) {
-		/invoke ${out[inc, Mercenary, string, ${Me.Mercenary}]}
-		OUT ....(\a-tneed a merc to test with\ax)
-	} else /if (!${Me.Mercenary.ID}) {
-		/invoke ${out[bad, Mercenary, string, ${Me.Mercenary}]}
-	} else {
-		/invoke ${out[good, Mercenary, string, ${Me.Mercenary}]}
-	}
+		/if (${Select[${Me.Mercenary},SUSPENDED]}) {
+			/invoke ${out[inc, Mercenary, string, ${Me.Mercenary}]}
+			OUT ....(\a-tneed a merc to test with\ax)
+		} else /if (!${Me.Mercenary.ID}) {
+			/invoke ${out[bad, Mercenary, string, ${Me.Mercenary}]}
+		} else {
+			/invoke ${out[good, Mercenary, string, ${Me.Mercenary}]}
+		}
 
 
 	| Me.MercenaryStance
-	/if (${Select[${Me.Mercenary},SUSPENDED]}) {
-		/invoke ${out[inc, MercenaryStance, string, ${Me.MercenaryStance}]}
-		OUT ....(\a-tneed a merc to test with\ax)
-	} else /if (!${Select[${Me.MercenaryStance},Reactive,Balanced,Effeicient,Passive,Burn,Aggressive,Assist]}) {
-		/invoke ${out[bad, MercenaryStance, string, ${Me.MercenaryStance}]}
-	} else {
-		/invoke ${out[good, MercenaryStance, string, ${Me.MercenaryStance}]}
-	}
+		/if (${Select[${Me.Mercenary},SUSPENDED]}) {
+			/invoke ${out[inc, MercenaryStance, string, ${Me.MercenaryStance}]}
+			OUT ....(\a-tneed a merc to test with\ax)
+		} else /if (!${Select[${Me.MercenaryStance},Reactive,Balanced,Effeicient,Passive,Burn,Aggressive,Assist]}) {
+			/invoke ${out[bad, MercenaryStance, string, ${Me.MercenaryStance}]}
+		} else {
+			/invoke ${out[good, MercenaryStance, string, ${Me.MercenaryStance}]}
+		}
 
 
 
@@ -706,6 +808,17 @@ sub start_MQ2CharacterType()
 
 
 
+	| Me.TotalCounters
+	| Me.CountersDisease
+	| Me.CountersPoison
+	| Me.CountersCurse
+	| Me.CountersCorruption
+	| Me.Diseased
+	| Me.Poisoned
+	| Me.Cursed
+	| Me.Corrupted
+
+
 	| Me.DSed
 	| Me.RevDSed
 	| Me.Feared
@@ -723,10 +836,8 @@ sub start_MQ2CharacterType()
 
 	| Me.Focus
 	| Me.Regen
-	| Me.Diseased
-	| Me.Poisoned
-	| Me.Cursed
-	| Me.Corrupted
+
+
 	| Me.Symbol
 
 	| Me.Clarity
@@ -765,17 +876,9 @@ sub start_MQ2CharacterType()
 	| Me.AutoSkill
 
 
-
-
-
-
-
 	| Me.Beneficial
 
 	| Me.Bandolier
-
-
-
 
 
 
