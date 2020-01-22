@@ -17,13 +17,23 @@
 #define GOOD "\agpass\ax"
 #define BAD "\arfail\ax"
 #define INC "\ayincomplete\ax"
+#define SKIP "\amskip\ax"
 
 
 #include TestSuite\RequirementsTest.inc
 #include TestSuite\MQ2MacroType.inc
 #include TestSuite\MQ2CharacterType.inc
-
-
+#include TestSuite\MQ2GroupType.inc
+#include TestSuite\MQ2RaidType.inc
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
 
 
 sub main(Param0)
@@ -52,9 +62,13 @@ sub main(Param0)
 
 
 	/call start_RequirementsTest
+	/call start_MQ2GroupType
 	/call start_MQ2MacroType
 	/call start_MQ2CharacterType
-
+	/call start_MQ2GroupType
+	| /call start_MQ2RaidType
+	/call start_MQ2FellowshipType
+	/call start_MQ2BandolierType
 
 	/echo
 	OUT \agTesting Completed\ax
@@ -67,7 +81,7 @@ sub main(Param0)
 
 |**
  * outputs results to screen and log
- * /invoke ${out[pass/fail/inc, MEMBER, expected type of data, ${TLO.Member}]}
+ * /invoke ${out[pass|fail|inc|skip, MEMBER, expected type of data, ${TLO.MEMBER}]}
  **|
 sub out(string _gb, string _name, string _expect, string _got)
 
@@ -84,6 +98,9 @@ sub out(string _gb, string _name, string _expect, string _got)
 		LOG ..${_name} .. incomplete.. unable to test on this run
 		OUT ..\aw${_name}\ax .. INC
 		OUT ....expect: \at${_expect}\ax ....got: \at${_got}\ax
+	} else /if (${_gb.Equal[skip]}) {
+		LOG ..${_name} .. skip.. no test for this
+		OUT ..\aw${_name}\ax .. SKIP
 	}
 
 	/if (${_gb.Equal[inc]}) {
@@ -93,7 +110,6 @@ sub out(string _gb, string _name, string _expect, string _got)
 	} else /if (!${hidePass}) {
 		/delay 1
 	}
-
 
 /return
 

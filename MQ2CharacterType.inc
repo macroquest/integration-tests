@@ -339,7 +339,6 @@ sub start_MQ2CharacterType()
 		/varset _MemberList |Cash|Platinum|Gold|Silver|Copper
 		/for _count 1 to ${_MemberList.Count[|]}
 			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
-
 			/if (!${Range.Between[0,999999999999:${Me.${_tmpMember}}]}) {
 				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {

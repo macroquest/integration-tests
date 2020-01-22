@@ -80,8 +80,8 @@ sub start_MQ2MacroType()
 		}
 
 	| Macro.CurCommand
-		/invoke ${out[inc, CurCommand, xxx, xxx]}
-		OUT ....(\a-tthis is a debugging command\ax)
+		/invoke ${out[skip, CurCommand, xxx, xxx]}
+		| OUT ....(\a-tthis is a debugging command\ax)
 
 	| Macro.MemUse
 		/if (!${Range.Between[1,999999:${Macro.MemUse}]}) {
