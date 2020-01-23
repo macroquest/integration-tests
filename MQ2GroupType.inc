@@ -19,7 +19,8 @@ sub start_MQ2GroupType()
 
 	| make sure we are in a group. if we are not. we skip this entire section of testing
 		/if (!${Range.Between[1,5:${Group}]}) {
-			/invoke ${out[bad, NA, >0, ${Group}]}
+			/invoke ${out[skip, Group.]}
+			OUT ....(\a-tMUST BE IN A GROUP\ax)
 			/return FALSE
 		}
 
@@ -150,8 +151,41 @@ sub start_MQ2GroupType()
 		| what the fuck?
 
 
+
 /return
 
 
 
 
+sub start_MQ2GroupMemberType()
+	/echo
+	OUT Testing::\awMQ2GroupMemberType\ax (\a-tGroup.Member[].\ax)
+	LOG
+	LOG Testing::MQ2GroupMemberType
+
+
+
+
+
+
+| Name
+| Leader
+| Spawn
+| Level
+| MainTank
+| MainAssist
+| MarkNpc
+| MasterLooter
+| Puller
+| Mercenary
+| Type
+| PctAggro
+| xIndex
+| Offline
+| Present
+| OtherZone
+
+
+
+
+/return

@@ -570,7 +570,8 @@ sub start_MQ2CharacterType()
 
 	| Me.Drunk
 		/if (!${Range.Between[0,100:${Me.Drunk}]}) {
-			/invoke ${out[bad, Drunk, int, ${Me.Drunk}]}
+			/invoke ${out[inc, Drunk, int, ${Me.Drunk}]}
+			OUT ....(\a-tgo drink some alcohol to test this\ax)
 		} else {
 			/invoke ${out[good, Drunk]}
 		}
@@ -737,6 +738,7 @@ sub start_MQ2CharacterType()
 	| Me.MercAAExp
 	| Me.MercAAPoints
 	| Me.MercAAPointsSpent
+	| Me.MercListInfo
 
 
 
@@ -855,7 +857,6 @@ sub start_MQ2CharacterType()
 
 	| Me.InInstance
 	| Me.Instance
-	| Me.MercListInfo
 	| Me.UseAdvancedLooting
 
 

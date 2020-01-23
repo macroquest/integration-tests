@@ -1,4 +1,9 @@
-
+|***
+ * TestSuite.mac
+ * MQ2DataTypes.cpp
+ * testing MQ2MacroType
+ *
+ ***|
 
 
 sub start_MQ2MacroType()
@@ -51,7 +56,7 @@ sub start_MQ2MacroType()
 		}
 
 	| Macro.StackSize
-		/if (${Macro.StackSize} != 2) {
+		/if (${Macro.StackSize} != 3) {
 			/invoke ${out[bad, StackSize, 2, ${Macro.StackSize}]}
 		} else {
 			/invoke ${out[good, StackSize]}

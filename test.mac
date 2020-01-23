@@ -25,6 +25,11 @@
 #include TestSuite\MQ2CharacterType.inc
 #include TestSuite\MQ2GroupType.inc
 #include TestSuite\MQ2RaidType.inc
+#include TestSuite\MQ2ClassType.inc
+#include TestSuite\MQ2TimeType.inc
+#include TestSuite\MQ2FellowshipType.inc
+| #include TestSuite\MQ2CachedBuffType.inc
+| #include TestSuite\MQ2TargetBuffType.inc
 | #include TestSuite\
 | #include TestSuite\
 | #include TestSuite\
@@ -34,6 +39,12 @@
 | #include TestSuite\
 | #include TestSuite\
 | #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+| #include TestSuite\
+
+
+
 
 
 sub main(Param0)
@@ -50,7 +61,8 @@ sub main(Param0)
 	/declare outerInt int outer 999999
 	| outer bool
 	/declare outerBool bool outer TRUE
-
+	| swap var for bind
+	/declare swap bool FALSE
 
 	| hide visual PASSing tests
 	/declare hidePass bool outer FALSE
@@ -60,21 +72,21 @@ sub main(Param0)
 		/varset Param0 bob
 	}
 
-
+	| test the requirements, no skipping this!
 	/call start_RequirementsTest
-	/call start_MQ2GroupType
-	/call start_MQ2MacroType
-	/call start_MQ2CharacterType
-	/call start_MQ2GroupType
-	| /call start_MQ2RaidType
-	/call start_MQ2FellowshipType
-	/call start_MQ2BandolierType
 
-	/echo
-	OUT \agTesting Completed\ax
+
+	/declare TLO[1] string outer
+	/varset TLO[1] |Macro|Group|Character|Fellowship|Bandolier|CachedBuff|TargetBuff|Class|Time
+
+	/call echo_info
+	/while (TRUE) {
+		| inf loop for knightly!!
+		/varset swap ${If[${swap},FALSE,TRUE]}
+		/delay 5
+	}
 
 /return
-
 
 
 
@@ -124,51 +136,50 @@ sub test_return_string()
 
 
 
-
-
-
 |**
- * checks if you have the expansion id returns T/F
- * expansion order is in list by array number
- * /call check_expansion [##]
+ * bind for testing specific TLOs (no tlo passed = all)
+ **|
+#Bind control_ts /ts
+sub Bind_control_ts(string tlo)
 
-sub check_expansion(int _expid)
+	/if (${Bool[${tlo}]}) {
+		/if (${SubDefined[start_MQ2${tlo}Type]}) {
+			/call start_MQ2${tlo}Type
+		} else /if (!${SubDefined[start_MQ2${tlo}Type]}) {
+			OUT Invalid::\a-wstart_MQ2${tlo}Type\ax
+		}
+	} else {
+		/declare x int local 0
+		/declare y int local 0
 
-	/declare _exp[26] string local
-	/varset _exp[1] The Ruins of Kunark
-	/varset _exp[2] The Scars of Velious
-	/varset _exp[3] The Shadows of Luclin
-	/varset _exp[4] The Planes of Power
-	/varset _exp[5] The Legacy of Ykesha
-	/varset _exp[6] Lost Dungeons of Norrath
-	/varset _exp[7] Gates of Discord
-	/varset _exp[8] Omens of War
-	/varset _exp[9] Dragons of Norrath
-	/varset _exp[10] Depths of Darkhollow
-	/varset _exp[11] Prophecy of Ro
-	/varset _exp[12] The Serpent's Spine
-	/varset _exp[13] The Buried Sea
-	/varset _exp[14] Secrets of Faydwer
-	/varset _exp[15] Seeds of Destruction
-	/varset _exp[16] Underfoot
-	/varset _exp[17] House of Thule
-	/varset _exp[18] Veil of Alaris
-	/varset _exp[19] Rain of Fear
-	/varset _exp[20] Call of the Forsaken
-	/varset _exp[21] The Darkened Sea
-	/varset _exp[22] The Broken Mirror
-	/varset _exp[23] Empires of Kunark
-	/varset _exp[24] Ring of Scale
-	/varset _exp[25] The Burning Lands
-	/varset _exp[26] Torment of Velious
+		| loop throuh the tlo array
+		/for x 1 to ${TLO.Size}
+			/for y 1 to ${TLO[${x}].Count[|]}
+				/call start_MQ2${TLO[${x}].Arg[${y},|]}Type
+			/next y
+		/next x
+	}
 
-
-	/if (${Me.HaveExpansion[${_exp[${_expid}]}]})
-
-
+	/call echo_info
 
 /return
 
-${Me.HaveExpansion[The Ruins of Kunark]}
 
+|**
+ * output basic info for the user
  **|
+sub echo_info()
+
+	/echo
+	OUT TLOs
+	| output the TLO list fopr peeps
+	/declare x int local 0
+	/for x 1 to ${TLO.Size}
+		OUT \a-w${TLO[${x}]}\ax
+	/next x
+
+	OUT \aw/ts TLONAME\ax (default:\a-tall\ax)
+	OUT ... waiting on you ...
+
+/return
+
