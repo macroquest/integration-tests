@@ -19,11 +19,11 @@ sub start_MQ2BandolierType()
 
 	| Index
 		/if (!${Me.Bandolier[test1].Index}) {
-			OUT Required to test. 1 bandolier named: \a-wtest1\ax
-			OUT put something in each slot for the test
+			OUT ....(\a-tRequired to test. 1 bandolier named: \a-wtest1\ax)
+			OUT ....(\a-tput something in each slot for the test\ax)
 			/delay 2s
 			/return
-		} else /if (!${Me.Bandolier[test1].Index}) {
+		} else /if (${Me.Bandolier[test1].Index}) {
 			/declare _index int local ${Me.Bandolier[test1].Index}
 		}
 
@@ -46,9 +46,9 @@ sub start_MQ2BandolierType()
 
 	| Item[1]
 		/if (!${Bool[${Me.Bandolier[${_index}].Item[1]}]}) {
-			/invoke ${out[bad, Name, string, ${Me.Bandolier[${_index}].Item[1]}]}
+			/invoke ${out[bad, Item[1], string, ${Me.Bandolier[${_index}].Item[1]}]}
 		} else {
-			/invoke ${out[good, Name]}
+			/invoke ${out[good, Item[1]]}
 		}
 
 	| Item[2]

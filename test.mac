@@ -28,9 +28,9 @@
 #include TestSuite\MQ2ClassType.inc
 #include TestSuite\MQ2TimeType.inc
 #include TestSuite\MQ2FellowshipType.inc
-| #include TestSuite\MQ2CachedBuffType.inc
-| #include TestSuite\MQ2TargetBuffType.inc
-| #include TestSuite\
+#include TestSuite\MQ2CachedBuffType.inc
+#include TestSuite\MQ2TargetBuffType.inc
+#include TestSuite\MQ2BandolierType.inc
 | #include TestSuite\
 | #include TestSuite\
 | #include TestSuite\
