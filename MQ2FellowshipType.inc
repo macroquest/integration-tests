@@ -16,7 +16,7 @@ sub start_MQ2FellowshipType()
 	LOG Testing::MQ2FellowshipType
 
 	| make sure we are a member of a fellowship. if we are not. we skip this entire section of testing
-		/if (!${Range.Between[1,999999999:${Me.Fellowship.ID}]}) {
+		/if (!${Range.Between[1,99999999999:${Me.Fellowship.ID}]}) {
 			/invoke ${out[skip, NA, int > 0, ${Me.Fellowship.ID}]}
 			OUT ...(\a-tNOT PART OF A FELLOWSHIP\ax)
 			/return FALSE
@@ -47,11 +47,16 @@ sub start_MQ2FellowshipType()
 
 
 	| xMember
-	| ${Me.Fellowship.Member} testing below!!
+	| Me.Fellowship.Member[].??
+	| lots oft hings to test with. we will use zone id as something simple
+		/if (${Me.Fellowship.Member[${Me.Name}].Zone.ID} != ${Zone.ID}) {
+			/invoke ${out[bad, Member, int, ${Me.Fellowship.Member[${Me.Name}].Zone.ID}]}
+		} else {
+			/invoke ${out[good, Member]}
+		}
 
 
-
-| CampfireDuration
+	| CampfireDuration
 		/if (!${Range.Between[0,3600:${Me.Fellowship.CampfireDuration}]}) {
 			/invoke ${out[bad, CampfireDuration, int, ${Me.Fellowship.CampfireDuration}]}
 		} else {
@@ -96,9 +101,7 @@ sub start_MQ2FellowshipType()
 		}
 
 
-	| Me.Fellowship.Member[].??
-
-	| Zone
+	| Me.Fellowship.Member[].??| Zone
 		/if (${Me.Fellowship.Member[${Me.Name}].Zone.Name.NotEqual[${Zone.Name}]}) {
 			/invoke ${out[bad, Zone, string, ${Me.Fellowship.Member[${Me.Name}].Zone}]}
 		} else {

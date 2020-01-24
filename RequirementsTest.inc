@@ -50,9 +50,14 @@ sub start_RequirementsTest()
 
 	| test a /delay
 		/echo ..delaying 2 seconds (/delay 2s)
+
+			| test /squelch
+				/squelch /echo if you can read this, squelch is broken.
+
+		/echo ..you should notice a 2 second dealy
 		/delay 2s
-		/echo ..you should have noticed a 2 second dealy
 		/echo
+
 
 	| test colors
 		/echo Color test
