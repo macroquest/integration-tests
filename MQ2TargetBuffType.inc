@@ -18,7 +18,9 @@ sub start_MQ2TargetBuffType()
 
 	| we need a target to check for buffs
 	/target id ${Me.ID}
-	/delay 2s ${Target.ID} == ${Me.ID}
+	/delay 5
+
+	/delay 5s ${Target.ID} == ${Me.ID}
 
 	/declare x int local 0
 	/declare foundBuff int local 0
@@ -28,6 +30,7 @@ sub start_MQ2TargetBuffType()
 	/for x 1 to 42
 		/if (${Bool[${Target.Buff[${x}]}]}) {
 			/varset foundBuff ${x}
+			/break
 		}
 	/next x
 
@@ -51,8 +54,8 @@ sub start_MQ2TargetBuffType()
 
 | xIndex
 
-
-
+	/squelch /target clear
+	/delay 5
 
 /return
 

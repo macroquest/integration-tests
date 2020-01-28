@@ -1,0 +1,269 @@
+| - DanNetStress.mac v0.003 by exspes 1/25/2020
+| - DanNetStress.mac v0.002 by exspes 5/29/2019.
+| -  formerly known as DanNetTest
+| -  rewritten to be readable and workable
+| -  removed the single response query
+| -  ping batches controlable
+| -  actual query required from reciever to simulate nongibberish stress
+| -  removed excessive varaibles
+| -  proper iteration of peerlist
+| -  a little inline documentation so you know wtf is going on
+| -  nevermind.. this is just a complete rewrite...
+|
+| - usage
+| 1: start the mac
+| 2: do /stress # (where # is the number of loops you want to do)
+| 3: /endm to end
+|
+|
+| - DanNetTest.mac v0.001 by Ctaylor22 12/19/2018.
+| - for the record, this is not the shit CTaylor wrote.
+| ----------------------------------------------------------------------------------------------
+
+
+| speed this bastard up. make it work for its dinner..
+#turbo 200
+
+sub Main()
+
+	| adjust these if you like
+
+	/squelch /dnet localecho FALSE
+	/squelch /dnet commandecho FALSE
+	/squelch /dnet frontdelim ON
+	/squelch /dnet fullnames FALSE
+	/dnet timeout 5
+
+
+	| set query type to be used
+	| complex will return a T/F in the ping result
+	| non complex will return a ##
+	| sorry its broke right now.. leave it FALSE
+	/declare complexquery					bool		outer FALSE
+
+	| how many pings to pass to each character for each loop of the qquery test.
+	/declare TotalPings						int			outer 4
+
+	| setting TRUE will disable the majority of spam
+	/declare silent								bool		outer TRUE
+
+	| the dannet group you want to evaluate, or abuse.. however you wanna see this..
+	/declare DNGroup							string	outer all
+
+	| do not adjust these. well i suppose you could but you would prob break something.
+	| but its not like you dont think somethings broke or you wouldn't be here
+	/declare LoadedPlugin 				int     outer 0
+	/declare PingData	    				string  outer
+	/declare forcebind						bool		outer FALSE
+	/declare totalstart						int			outer 0
+	/declare totalend							int			outer 0
+	/declare totalfailcount				int			outer 0
+	/declare totalpingcount 			int 		outer 0
+
+
+	/mqclear
+
+	/echo MQ2DanNet Abuse Macro
+	/call CheckPlugin
+	/echo \aw/query\ax [\at##\ax of loops]
+	/echo \aw/observe\ax
+	/echo
+	/echo \a-t/endm\ax to end
+	/echo ...  \agwaiting on you\ax ...
+
+
+	| god i fucking love infinite loops..
+	| we will dedicate this one to Knightly
+	/while (1) {
+		/delay 5
+		/varset forcebind TRUE
+	}
+
+
+
+	:OnExit
+		/echo \arEnding DanNet Abuse Macro\ax
+		/if (${LoadedPlugin}) {
+			/plugin MQ2DanNet unload noauto
+		}
+
+
+/return
+
+
+
+| i'm not sure why this is here. i mean.. seriously
+| if you're running this and dont have the plugin loaded.. you should just give up.
+sub CheckPlugin()
+	/if (!${Bool[${Plugin[MQ2DanNet]}]}) {
+		/echo DanNet Plugin NOT Detected. Loading Plugin.
+		/plugin MQ2DanNet noauto
+		/varset LoadedPlugin 1
+	}
+/return
+
+
+
+
+#Bind command_query /query
+sub Bind_command_query(int _loopcount)
+	/varset totalstart ${MacroQuest.Running}
+	/declare startTime  	 							 		int    	local 0
+	/declare endTime   									  	int    	local 0
+	/declare _peercount											int 		local 1
+	/declare _toonName											string 	local
+	/declare _pingcount											int 		local 1
+	/declare _spamcount											int 		local 1
+	/declare _avg[${TotalPings}]						int			local
+	/declare _average 											int			local 0
+	/declare _loss 													int			local 0
+	/declare _received 											int			local 0
+	/declare QResponse 											string	local
+
+
+	| do 1 ping batch minimum
+	/if (!${Bool[${_loopcount}]}) {
+		/varset _loopcount 1
+	}
+
+	| cycle every peer in dannet All group
+	/while (${_peercount} <= ${DanNet[${DNGroup}].PeerCount}) {
+
+		| get a usable name
+		/varset _toonName ${DanNet[${DNGroup}].Peers.Arg[${_peercount},|]}
+		| skip me
+		/if (${_toonName.Equal[${Me.DisplayName}]}) {
+			/varcalc _peercount ${_peercount}+1
+			/continue
+		}
+
+		| how many times do we want to run the ping batch?
+		/for _spamcount 1 to ${_loopcount}
+			/varset _pingcount 1
+			/varset _loss 0
+			/varset _received 0
+			/varset _average 0
+
+			/if (!${silent}) /echo
+			/echo Pinging: ${_spamcount} \aw${_toonName}\ax with \a-t${If[${complexquery},Complex,Non-Complex]} Query\ax
+
+			| start the pings
+			/while (${_pingcount} <= ${TotalPings}) {
+				/varset QResponse NULL
+
+				/varset startTime ${MacroQuest.Running}
+
+
+				/if (${complexquery}) {
+					/dquery ${_toonName} -q "LineOfSight[${Me.Y},${Me.X},${Me.Z}:$\{Me.Y},$\{Me.X},$\{Me.Z}]" -o QResponse -t 1
+				} else /if (!${complexquery}) {
+					/dquery ${_toonName} -q "Me.FreeBuffSlots" -o QResponse -t 1
+				}
+
+				/delay 20 ${DanNet[${_toonName}].Query[${QResponse}].Received}
+				/varset endTime ${MacroQuest.Running}
+
+				/varset _avg[${_pingcount}] ${Math.Calc[${endTime}-${startTime}]}
+
+				/if (!${QResponse.Length}) {
+					/if (!${silent}) /echo No Information Received From \at${_toonName}\ax Time: ${_avg[${_pingcount}]}
+					/varcalc _loss ${_loss}+1
+					/varcalc totalfailcount ${totalfailcount}+1
+				} else {
+					/if (!${silent}) /echo Reply from \at${_toonName}\ax Time:\aw${_avg[${_pingcount}]}\ax Result:\aw${QResponse}\ax
+					/varcalc _received ${_received}+1
+				}
+
+				/varcalc _average ${_average}+${_avg[${_pingcount}]}
+				| next ping please
+				/varcalc _pingcount ${_pingcount}+1
+			}
+			/varcalc totalpingcount ${totalpingcount}+${TotalPings}
+
+
+			/if (!${silent}) {
+				/echo Ping statistics for \aw${_toonName}\ax
+				/echo Packets: Sent = \aw${TotalPings}\ax, Recieved = \ag${_received}\ax. Los = \ar${_loss}\ax (${Int[${Math.Calc[${_loss} / ${_received}]}]}% loss),
+				/echo Aproximate round trip time Average = \aw${Math.Calc[(((${_average}) / 4) / 10) / 60]}\ax seconds
+				/echo
+			}
+
+		/next _spamcount
+
+		| move to next dannet peer
+		/varcalc _peercount ${_peercount}+1
+
+	}
+	/varset totalend ${MacroQuest.Running}
+
+	/echo Total Running Time:\aw${Math.Calc[((${totalend}-${totalstart}) / 10) / 60]}\ax seconds
+	/echo Totals: pings = \aw${totalpingcount}\ax failures = \aw${totalfailcount}\ax
+
+
+/return
+
+
+
+
+
+
+| the following observer tests will be set as a patter following
+| charactername_test
+| we will ask the others in the DNGroup to respond to the observers and validate with a spawn check
+| observer tests: |Race|Class.ShortName|Weight|Height
+
+
+#Bind command_observe /observe
+sub Bind_command_observe(int _loopcount)
+
+	/declare _peercount											int 		local 1
+	/declare _toonName											string 	local
+	/declare _count 												int 		local 0
+	/declare _tests													string 	local |Race|Class|Height
+
+	| do 1 ping batch minimum
+	/if (!${Bool[${_loopcount}]}) {
+		/varset _loopcount 1
+	}
+
+	| cycle every peer in dannet All group
+	/while (${_peercount} <= ${DanNet[${DNGroup}].PeerCount}) {
+
+		| get a usable name
+		/varset _toonName ${DanNet[${DNGroup}].Peers.Arg[${_peercount},|]}
+		| skip me
+		/if (${_toonName.Equal[${Me.DisplayName}]}) {
+			/varcalc _peercount ${_peercount}+1
+			/continue
+		}
+
+		/echo Building observers and variables for: \aw${_toonName}\ax
+		/for _count 1 to ${_tests.Count[|]}
+			/if (!${Defined[${_toonName}_${_tests.Arg[${_count},|]}]}) {
+				/declare ${_toonName}_${_tests.Arg[${_count},|]} string outer
+			}
+			| /echo /dobserve ${_toonName} -q "Me.${_tests.Arg[${_count},|]}" -o ${_toonName}_${_tests.Arg[${_count},|]}
+			/dobserve ${_toonName} -q "Me.${_tests.Arg[${_count},|]}" -o ${_toonName}_${_tests.Arg[${_count},|]}
+
+		/next _count
+		/echo
+		/delay 5
+
+		/echo Observation Results: \aw${_toonName}\ax
+
+		/for _count 1 to ${_tests.Count[|]}
+			/echo .. spawn(\a-t${Spawn[${_toonName}].${_tests.Arg[${_count},|]}}\ax)  observed(\at${${_toonName}_${_tests.Arg[${_count},|]}}\ax)
+		/next _count
+
+
+		| move to next dannet peer
+		/varcalc _peercount ${_peercount}+1
+
+	}
+
+
+
+/return
+
+
+

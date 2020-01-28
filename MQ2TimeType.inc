@@ -19,7 +19,7 @@ sub start_MQ2TimeType()
 
 
 	| Hour (24 hour)
-		/if (!${Range.Between[1,24:${Time.Hour}]}) {
+		/if (!${Range.Between[0,24:${Time.Hour}]}) {
 			/invoke ${out[bad, Hour, int, ${Time.Hour}]}
 		} else {
 			/invoke ${out[good, Hour]}

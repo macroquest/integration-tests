@@ -31,11 +31,11 @@
 #include TestSuite\MQ2CachedBuffType.inc
 #include TestSuite\MQ2TargetBuffType.inc
 #include TestSuite\MQ2BandolierType.inc
-| #include TestSuite\
-| #include TestSuite\
-| #include TestSuite\
-| #include TestSuite\
-| #include TestSuite\
+#include TestSuite\MQ2FriendsType.inc
+#include TestSuite\MQ2DeityType.inc
+| #include TestSuite\MQ2WorldLocationType.inc
+#include TestSuite\MQ2RaceType.inc
+#include TestSuite\MQ2MacroQuestType.inc
 | #include TestSuite\
 | #include TestSuite\
 | #include TestSuite\
@@ -57,17 +57,23 @@ sub main(Param0)
 	| these will be used all over the place.
 	| outer string (yes i know it's a long word)
 	/declare outerString string outer OuterStringOUTERSTRING
+
 	| outer int
 	/declare outerInt int outer 999999
+
 	| outer bool
 	/declare outerBool bool outer TRUE
+
 	| swap var for bind
 	/declare swap bool FALSE
 
 	| hide visual PASSing tests
 	/declare hidePass bool outer FALSE
 
-	| fake a Param if one is not pased
+	| set max lvl. don't want to hardcode this in a bunch of places
+	/declare maxLevel int outer 115
+
+	| fake a Param if one is not passed
 	/if (!${Bool[${Param0}]}) {
 		/varset Param0 bob
 	}
@@ -76,10 +82,16 @@ sub main(Param0)
 	/call start_RequirementsTest
 
 
-	/declare TLO[1] string outer
-	/varset TLO[1] |Macro|Group|Character|Fellowship|Bandolier|CachedBuff|TargetBuff|Class|Time
+	/declare TLO[2] string outer
+	/varset TLO[1] |Macro|Group|Character|Fellowship|Bandolier|CachedBuff|TargetBuff|Class
+	/varset TLO[2] |Time|Friends|Diety|Race|MacroQuest
+
+
+	| WorldLocation
 
 	/call echo_info
+
+	| wait for user input
 	/while (TRUE) {
 		| inf loop for knightly!!
 		/varset swap ${If[${swap},FALSE,TRUE]}
@@ -170,13 +182,22 @@ sub Bind_control_ts(string tlo)
  **|
 sub echo_info()
 
+	/declare x int local 0
+	/declare y int local 0
+	/declare output string local
+
 	/echo
 	OUT TLOs
-	| output the TLO list fopr peeps
-	/declare x int local 0
+	| output the TLO list for peeps
 	/for x 1 to ${TLO.Size}
-		OUT \a-w${TLO[${x}]}\ax
+		/for y 1 to ${TLO[${x}].Count[|]}
+			/varset output ${output} \a-w${TLO[${x}].Arg[${y},|]}\ax${If[${y}==${TLO[${x}].Count[|]},,,]}
+		/next y
+		OUT ${output}
+		/varset output
 	/next x
+
+	/echo
 
 	OUT \aw/ts TLONAME\ax (default:\a-tall\ax)
 	OUT ... waiting on you ...
