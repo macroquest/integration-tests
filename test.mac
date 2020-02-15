@@ -21,6 +21,7 @@
 
 
 #include TestSuite\RequirementsTest.inc
+#include TestSuite\MQ2StringType.inc
 #include TestSuite\MQ2MacroType.inc
 #include TestSuite\MQ2CharacterType.inc
 #include TestSuite\MQ2GroupType.inc
@@ -36,13 +37,14 @@
 | #include TestSuite\MQ2WorldLocationType.inc
 #include TestSuite\MQ2RaceType.inc
 #include TestSuite\MQ2MacroQuestType.inc
-| #include TestSuite\
-| #include TestSuite\
-| #include TestSuite\
-| #include TestSuite\
-| #include TestSuite\
-| #include TestSuite\
+#include TestSuite\MQ2ArrayType.inc
+| #include TestSuite\MQ2GroundType.inc
+#include TestSuite\MQ2BodyType.inc
+#include TestSuite\MQ2FloatType.inc
+| #include TestSuite\MQ2DoubleType.inc
+#include TestSuite\MQ2IntType.inc
 
+#include TestSuite\MQ2MathType.inc
 
 
 
@@ -56,7 +58,7 @@ sub main(Param0)
 	| set some outer variables
 	| these will be used all over the place.
 	| outer string (yes i know it's a long word)
-	/declare outerString string outer OuterStringOUTERSTRING
+	/declare myString string outer MyStringMYSTRING
 
 	| outer int
 	/declare outerInt int outer 999999
@@ -81,10 +83,12 @@ sub main(Param0)
 	| test the requirements, no skipping this!
 	/call start_RequirementsTest
 
-
-	/declare TLO[2] string outer
+	| establish the array for all the TLOs we will be using
+	| this will also be used in the ArrayType test
+	/declare TLO[3] string outer
 	/varset TLO[1] |Macro|Group|Character|Fellowship|Bandolier|CachedBuff|TargetBuff|Class
-	/varset TLO[2] |Time|Friends|Diety|Race|MacroQuest
+	/varset TLO[2] |Time|Friends|Deity|Race|MacroQuest|String|Array|Body
+	/varset TLO[3] |Math|Float|Int
 
 
 	| WorldLocation
@@ -105,26 +109,38 @@ sub main(Param0)
 
 |**
  * outputs results to screen and log
- * /invoke ${out[pass|fail|inc|skip, MEMBER, expected type of data, ${TLO.MEMBER}]}
+ * /invoke ${out[pass|fail|inc|skip|echo, MEMBER, expected type of data, ${TLO.MEMBER}]}
  **|
 sub out(string _gb, string _name, string _expect, string _got)
 
+	| result is good, yay us!
 	/if (${_gb.Equal[good]}) {
 		LOG ..${_name} .. pass
 		/if (!${hidePass}) {
 			OUT ..${_name} .. GOOD
 		}
+
+	| result is bad. make a note, and move on
 	} else /if (${_gb.Equal[bad]}) {
 		LOG ..${_name} .. FAIL.. expect:${_expect} got:${_got}
 		OUT ..\aw${_name}\ax .. BAD
 		OUT ....expect: \at${_expect}\ax ....got: \at${_got}\ax
+
+	| test is invomplete for some reason
 	} else /if (${_gb.Equal[inc]}) {
 		LOG ..${_name} .. incomplete.. unable to test on this run
 		OUT ..\aw${_name}\ax .. INC
 		OUT ....expect: \at${_expect}\ax ....got: \at${_got}\ax
+
+	| skip this, we canot test in current environment
 	} else /if (${_gb.Equal[skip]}) {
 		LOG ..${_name} .. skip.. no test for this
 		OUT ..\aw${_name}\ax .. SKIP
+
+	| some form of simple conversions where you just need to echo the data
+	} else /if (${_gb.Equal[echo]}) {
+		LOG ..${_name} .. just an echo for continuity
+		OUT ..${_name} .. \at${_got}\ax
 	}
 
 	/if (${_gb.Equal[inc]}) {
@@ -144,7 +160,7 @@ sub out(string _gb, string _name, string _expect, string _got)
  **|
 sub test_return_string()
  | empty
-/return ${outerString}
+/return ${myString}
 
 
 

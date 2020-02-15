@@ -24,20 +24,12 @@ sub start_MQ2FriendsType()
 			/invoke ${out[good, Friend[#]]}
 		}
 
-
-
-
 	| Friend[name]
 		/if (!${Bool[${Friends.Friend[${Friends.Friend[1]}]}]}) {
 			/invoke ${out[bad, Friend[name], string, ${Friends.Friend[${Friends.Friend[1]}]}]}
 		} else {
 			/invoke ${out[good, Friend[name]]}
 		}
-
-
-
-
-
 
 /return
 

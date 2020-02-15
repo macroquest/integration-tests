@@ -1,6 +1,6 @@
 |***
  * TestSuite.mac
- * MQ2RaidType.cpp
+ * MQ2DataTypes.cpp
  * testing MQ2RaidType
  *
  ***|

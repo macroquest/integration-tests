@@ -42,7 +42,7 @@ sub start_MQ2CharacterType()
 		/if (!${Range.Between[0,99999:${Me.LCK}]}) {
 			/invoke ${out[bad, LCK, int, ${Me.LCK}]}
 		} else {
-			/invoke ${out[good, ${Me.LCK}]}
+			/invoke ${out[good, LCK]}
 		}
 
 
@@ -339,7 +339,7 @@ sub start_MQ2CharacterType()
 		/varset _MemberList |Cash|Platinum|Gold|Silver|Copper
 		/for _count 1 to ${_MemberList.Count[|]}
 			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
-			/if (!${Range.Between[0,999999999999:${Me.${_tmpMember}}]}) {
+			/if (!${Range.Between[0,2147483647:${Me.${_tmpMember}}]}) {
 				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
 				/invoke ${out[good, ${_tmpMember}]}
@@ -352,7 +352,7 @@ sub start_MQ2CharacterType()
 		/for _count 1 to ${_MemberList.Count[|]}
 			/varset _tmpMember ${_MemberList.Arg[${_count},|]}
 
-			/if (!${Range.Between[0,999999999999:${Me.${_tmpMember}}]}) {
+			/if (!${Range.Between[0,2147483647:${Me.${_tmpMember}}]}) {
 				/invoke ${out[bad, ${_tmpMember}, int, ${Me.${_tmpMember}}]}
 			} else {
 				/invoke ${out[good, ${_tmpMember}]}
@@ -361,7 +361,7 @@ sub start_MQ2CharacterType()
 
 
 	| Me.PlatinumShared
-		/if (!${Range.Between[0,999999999999:${Me.PlatinumShared}]}) {
+		/if (!${Range.Between[0,2147483647:${Me.PlatinumShared}]}) {
 			/invoke ${out[bad, PlatinumShared, int, ${Me.PlatinumShared}]}
 		} else {
 			/invoke ${out[good, PlatinumShared]}
@@ -384,7 +384,7 @@ sub start_MQ2CharacterType()
 
 		/for _countArray 1 to ${_altCurrency.Size}
 			/for _count 1 to ${_altCurrency[${_countArray}].Count[|]}
-				/if (!${Range.Between[0,999999999999:${Me.${_altCurrency[${_countArray}].Arg[${_count},|]}}]}) {
+				/if (!${Range.Between[0,2147483647:${Me.${_altCurrency[${_countArray}].Arg[${_count},|]}}]}) {
 					/invoke ${out[bad, ${_altCurrency[${_countArray}].Arg[${_count},|]}, int, ${Me.${_altCurrency[${_countArray}].Arg[${_count},|]}}]}
 				} else {
 					/invoke ${out[good, ${_altCurrency[${_countArray}].Arg[${_count},|]}]}

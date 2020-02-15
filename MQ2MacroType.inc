@@ -14,7 +14,7 @@ sub start_MQ2MacroType()
 
 	| Macro.Name
 		/if (${Macro.Name.NotEqual[testsuite\test.mac]}) {
-			/invoke ${out[bad, Name, "testsuite\test.mac", ${Macro.Name}]}
+			/invoke ${out[bad, Name, string, ${Macro.Name}]}
 		} else {
 			/invoke ${out[good, Name]}
 		}
@@ -35,29 +35,29 @@ sub start_MQ2MacroType()
 
 	| Macro.Return
 		/call test_return_string
-		/if (${Macro.Return.NotEqual[OuterStringOUTERSTRING]}) {
-			/invoke ${out[bad, Return, OuterStringOUTERSTRING, ${Macro.Return}]}
+		/if (${Macro.Return.NotEqual[MyStringMYSTRING]}) {
+			/invoke ${out[bad, Return, string, ${Macro.Return}]}
 		} else {
 			/invoke ${out[good, Return]}
 		}
 
 	| Macro.IsTLO
 		/if (${Macro.IsTLO[Name]}) {
-			/invoke ${out[bad, IsTLO, TRUE, ${Macro.IsTLO[Name]}]}
+			/invoke ${out[bad, IsTLO, bool, ${Macro.IsTLO[Name]}]}
 		} else {
 			/invoke ${out[good, IsTLO]}
 		}
 
 	| Macro.IsOuterVariable
-		/if (!${Macro.IsOuterVariable[outerString]}) {
-			/invoke ${out[bad, IsOuterVariable, TRUE, ${Macro.IsOuterVariable[outerString]}]}
+		/if (!${Macro.IsOuterVariable[myString]}) {
+			/invoke ${out[bad, IsOuterVariable, bool, ${Macro.IsOuterVariable[myString]}]}
 		} else {
 			/invoke ${out[good, IsOuterVariable]}
 		}
 
 	| Macro.StackSize
 		/if (${Macro.StackSize} != 3) {
-			/invoke ${out[bad, StackSize, 2, ${Macro.StackSize}]}
+			/invoke ${out[bad, StackSize, int, ${Macro.StackSize}]}
 		} else {
 			/invoke ${out[good, StackSize]}
 		}
@@ -79,14 +79,13 @@ sub start_MQ2MacroType()
 
 	| Macro.CurSub
 		/if (${Macro.CurSub.NotEqual[start_MQ2MacroType()]}) {
-			/invoke ${out[bad, CurSub, start_MQ2MacroType(), ${Macro.CurSub}]}
+			/invoke ${out[bad, CurSub, string, ${Macro.CurSub}]}
 		} else {
 			/invoke ${out[good, CurSub]}
 		}
 
 	| Macro.CurCommand
 		/invoke ${out[skip, CurCommand, xxx, xxx]}
-		| OUT ....(\a-tthis is a debugging command\ax)
 
 	| Macro.MemUse
 		/if (!${Range.Between[1,999999:${Macro.MemUse}]}) {
