@@ -617,10 +617,6 @@ test.spawn.Z = function()
     test.is_number(Me.Z())
 end
 
-
-
-
-
 -- datatype:character members
 
 -- datatype:target members

@@ -1,3 +1,5 @@
+-- Code modified for use inside the MQNext
+
 -- COMMAND LINE ----------------------------------------------------------------
 local function print_help()
     print "Usage: target.lua [options] [regex]"

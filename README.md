@@ -26,10 +26,10 @@ Macroquest Next Integration Tests
 ## Run your tests
 
 - Ensure the MQ2Lua Plugin is installed
-`plugin mq2lua load`
+```plugin mq2lua load```
 
 - Run the "Me" TLO
-`/lua run TestSuite/Me-TLO`
+```/lua run TestSuite/Me-TLO```
 
 - You should see output like this:
 
