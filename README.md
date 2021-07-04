@@ -38,8 +38,6 @@ Macroquest Next Integration Tests
 ## Feedback 
 Any questions or suggestions?
 
-You are welcome to discuss it on our Discord Server.
-
-[![Discord](https://discord.gg/gKktV3DY6M)
+You are welcome to discuss it on our [Discord Channel](https://discord.gg/gKktV3DY6M)
 
 <br/>
