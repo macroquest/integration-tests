@@ -19,21 +19,34 @@ Macroquest Next Integration Tests
 - Do not self-buff
 - Do not click on any "clickie" eqiupment
 - Be wary of areas where you may be inadverantly buffed while running tests
-- Park the SK in PoK
+- Park the SK in a safe spot away from large crowds
 
 <br/>
 
 ## Run your tests
 
+All commands are ran from the MQNext Console
 - Ensure the MQ2Lua Plugin is installed
-```plugin mq2lua load```
 
-- Run the "Me" TLO
-```/lua run TestSuite/Me-TLO```
+
+```
+/plugin mq2lua load
+```
+
+- Test the "Me" TLO
+```
+/lua run TestSuite/Me-TLO
+```
+
+- Test only members that contain the word 'combat'
+```
+/lua run TestSuite/Me combat
+```
 
 - You should see output like this:
 
-<insert graphic here>
+![Example Output](/images/testSuite_example_run.png)
+
 
 ## Feedback 
 Any questions or suggestions?
