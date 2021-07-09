@@ -40,10 +40,10 @@ All commands are ran from the MQNext Console
 
 - Test only members that contain the word 'combat'
 ```
-/lua run TestSuite/Me combat
+/lua run TestSuite/Me-TLO combat
 ```
 
-- You should see output like this:
+- Test results are displayed in the MQNext Console:
 
 ![Example Output](/images/testSuite_example_run.png)
 
