@@ -1,7 +1,7 @@
 <br/>
 
-# MQNext Test Suite
-Macroquest Next Integration Tests
+# MacroQuest Test Suite
+Macroquest Integration Tests
 
 <br/>
 
@@ -14,7 +14,7 @@ Macroquest Next Integration Tests
 <br/>
 
 ## Getting Started
-- Clone the project in your MQNext lua folder (this will create a subfolder called "TestSuite")
+- Clone the project in your lua folder (this will create a subfolder called "TestSuite")
 - All tests (so far) are based on a Heroic level 85 Male Troll Shadow Knight
 - Do not self-buff
 - Do not click on any "clickie" eqiupment
@@ -25,7 +25,7 @@ Macroquest Next Integration Tests
 
 ## Run your tests
 
-All commands are ran from the MQNext Console
+All commands are ran from the MacroQuest Console
 - Ensure the MQ2Lua Plugin is installed
 
 
@@ -43,7 +43,7 @@ All commands are ran from the MQNext Console
 /lua run TestSuite/Me-TLO combat
 ```
 
-- Test results are displayed in the MQNext Console:
+- Test results are displayed in the MacroQuest Console:
 
 ![Example Output](/images/testSuite_example_run.png)
 

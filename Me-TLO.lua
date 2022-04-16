@@ -73,7 +73,7 @@ end
 
 test.spawn.BearingToTarget = function()
     ---Issue with this member.  Always returns 0
-    ---https://gitlab.com/macroquest/next/mqnext/-/issues/330
+    ---See Issue #330
 end
 
 test.spawn.Binding = function()
@@ -462,7 +462,7 @@ test.spawn.NearestSpawn = function()
 end
 
 test.broken.Next = function()
-    --https://gitlab.com/macroquest/next/mqnext/-/issues/336
+    --Issue #336
 end
 
 test.spawn.Owner = function()

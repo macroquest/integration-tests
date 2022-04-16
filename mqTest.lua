@@ -1,4 +1,4 @@
--- Code modified for use inside the MQNext
+-- Code modified for use inside MacroQuest
 
 -- COMMAND LINE ----------------------------------------------------------------
 local function print_help()
